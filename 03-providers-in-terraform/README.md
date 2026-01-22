@@ -37,7 +37,7 @@ Providers are declared and configured within `.tf` files, typically inside a `te
 
 ```hcl
 terraform {
-  required_version = ">= 1.0" #required version of terraform cli
+  required_version = ">= 1.3" #required version of terraform cli
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -49,14 +49,29 @@ terraform {
 
 provider "aws" {
   region = "us-east-1"
+
+  # Best Practice: Centralized tagging
+  default_tags {
+    tags = {
+      Project     = "MyApplication"
+      Environment = "Dev"
+      ManagedBy   = "Terraform"
+    }
+  }
 }
 ```
 
-- **required_version** : Specifies which version of the Terraform CLI is allowed to run the configuration.
+- **default_tags Block** :
+  Your description of default_tags as a "best practice" is 100% correct.
+  How it works: Terraform merges these tags into every resource created by this provider.
+  Precedence: If you define a tag with the same key directly on a specific resource, the resource-level tag will override the default_tags value.
+  Tip: Note that some legacy resources (like aws_autoscaling_group) may still require specific handling via the aws_default_tags data source to propagate tags to sub-resources like EC2 instances.
 
-- **required_providers Block:** This block specifies the providers needed for the configuration, including their source location (e.g., `hashicorp/aws`) and a version constraint.
+* **required_version** : Specifies which version of the Terraform CLI is allowed to run the configuration.
 
-- **provider Block:** This block is used to configure provider-specific settings, such as the AWS region. While it is possible to hardcode credentials like `secret_key` and `access_key_id` here, it's not really a best practice to do that.
+* **required_providers Block:** This block specifies the providers needed for the configuration, including their source location (e.g., `hashicorp/aws`) and a version constraint.
+
+* **provider Block:** This block is used to configure provider-specific settings, such as the AWS region. While it is possible to hardcode credentials like `secret_key` and `access_key_id` here, it's not really a best practice to do that.
 
 ### Pro Tip:
 
