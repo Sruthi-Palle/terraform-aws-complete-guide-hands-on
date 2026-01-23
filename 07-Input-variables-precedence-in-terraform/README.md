@@ -1,4 +1,4 @@
-# Input Variables Precedence in Terraform
+# Terraform Input Variables Precedence in Terraform
 
 Terraform loads variables in a specific order, with **later sources taking precedence over earlier ones**. This means the value found in a higher precedence source will override any values set in lower precedence sources.
 
@@ -6,9 +6,9 @@ Here's the order from **lowest precedence (least specific) to highest precedence
 
 ### **1\. Default Values (in** `variable` declarations)
 
-- **Source:** Defined directly within the `variable` block in your `.tf` files (e.g., [`variables.tf`](http://variables.tf)).
+- **Source:** Defined directly within the `variable` block in your `.tf` files (e.g., `variables.tf`).
 - **Example:**
-  ```bash
+  ```yaml
   variable "instance_type" {
     description = "Type of EC2 instance"
     type        = string
@@ -31,19 +31,19 @@ Here's the order from **lowest precedence (least specific) to highest precedence
 
 - **Source:** A file named exactly `terraform.tfvars` (or `terraform.tfvars.json`) in the root of your Terraform configuration directory. This file is **automatically loaded** by Terraform.
 - **Example (**`terraform.tfvars`):
-  ```bash
+  ```yaml
   instance_type = "t2.medium"
   ```
 - **Explanation:** This is a common place to set project-specific default values that are usually committed to version control. Values in this file override environment variables and default values.
 
 ### 4\. `*.auto.tfvars` **files (and** `*.auto.tfvars.json`**)**
 
-- **Source:** Any files in the root of your Terraform configuration directory ending with `.auto.tfvars` (e.g., [`dev.auto`](http://dev.auto)`.tfvars`, [`prod.auto`](http://prod.auto)`.tfvars`) or `.auto.tfvars.json`. These files are also **automatically loaded** by Terraform in **lexical (alphabetical) order of their filenames**.
-- **Example (**[`prod.auto`](http://prod.auto)`.tfvars`):
-  ```bash
+- **Source:** Any files in the root of your Terraform configuration directory ending with `.auto.tfvars` (e.g., `dev.auto.tfvars`, `prod.auto.tfvars`) or `.auto.tfvars.json`. These files are also **automatically loaded** by Terraform in **lexical (alphabetical) order of their filenames**.
+- **Example (**`prod.auto.tfvars`):
+  ```yaml
   instance_type = "t2.large"
   ```
-- **Explanation:** These are very useful for separating environment-specific configurations. For instance, [`dev.auto`](http://dev.auto)`.tfvars` might contain values for your development environment, and [`prod.auto`](http://prod.auto)`.tfvars` for production. Because they are loaded alphabetically, if you have [`a.auto`](http://a.auto)`.tfvars` and [`b.auto`](http://b.auto)`.tfvars` and both define the same variable, [`b.auto`](http://b.auto)`.tfvars` will take precedence. They override `terraform.tfvars`, environment variables, and default values.
+- **Explanation:** These are very useful for separating environment-specific configurations. For instance, `dev.auto.tfvars` might contain values for your development environment, and `prod.auto.tfvars` for production. Because they are loaded alphabetically, if you have `a.auto.tfvars` and `b.auto.tfvars` and both define the same variable, `b.auto.tfvars` will take precedence. They override `terraform.tfvars`, environment variables, and default values.
 
 ### **5 .Command-Line Options (**`-var-file` **and** `-var`**)**
 
@@ -123,11 +123,11 @@ This option allows you to set the value for a single variable directly on the co
 
 **Practical Implications and Best Practices:**
 
-- **Readability:** Use [`variables.tf`](http://variables.tf) to declare all variables and their types, descriptions, and sensible defaults.
+- **Readability:** Use `variables.tf` to declare all variables and their types, descriptions, and sensible defaults.
 - **Layering:** Leverage the precedence order to layer your configurations:
-  - [`variables.tf`](http://variables.tf): Global defaults that rarely change.
+  - `variables.tf`: Global defaults that rarely change.
   - `terraform.tfvars`: Project-specific defaults that are stable.
-  - `*.auto.tfvars`: Environment-specific overrides (e.g., [`dev.auto`](http://dev.auto)`.tfvars`, [`prod.auto`](http://prod.auto)`.tfvars`).
+  - `*.auto.tfvars`: Environment-specific overrides (e.g., `dev.auto.tfvars`, `prod.auto.tfvars`).
   - Command Line: Temporary, ad-hoc, or pipeline-driven overrides.
 - **Sensitive Data:** **Avoid hardcoding sensitive values** in any `.tfvars` file that might be committed to version control. Use environment variables (carefully), or preferably, a dedicated secret management solution (like AWS Secrets Manager, HashiCorp Vault, Azure Key Vault, GCP Secret Manager).
 - **Transparency:** Always run `terraform plan` to review the execution plan and see the resolved variable values before applying changes, especially when variables are sourced from multiple places.
@@ -140,7 +140,7 @@ This option allows you to set the value for a single variable directly on the co
 
 1. **Modify** `main.tf`: (You can continue in the same directory or create a new one for this scenario.)
 
-   ```bash
+   ```yaml
    # main.tf
 
    # Configure the AWS Provider
@@ -168,7 +168,7 @@ This option allows you to set the value for a single variable directly on the co
 
 2. **Create** `variables.tf`: (It's a good practice to separate variable declarations into a dedicated file.)
 
-   ```bash
+   ```yaml
    # variables.tf
 
    variable "aws_region" {
@@ -198,7 +198,7 @@ This option allows you to set the value for a single variable directly on the co
 
 3. **Create** `terraform.tfvars`: (This file provides default or specific values for variables without command-line input.)
 
-   ```bash
+   ```yaml
    # terraform.tfvars
 
    aws_region      = "us-east-1"
