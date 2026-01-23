@@ -1,5 +1,3 @@
-# 🔒 Terraform Dependency Lock File (.terraform.lock.hcl)
-
 ### 1\. 🔒 Terraform Dependency Lock File (`.terraform.lock.hcl`)
 
 The lock file is our **"Infrastructure Receipt."** It ensures that every team member and our CI/CD pipeline use the exact same provider versions, preventing "works on my machine" bugs.
@@ -60,14 +58,14 @@ If your [`main.tf`](http://main.tf) has:
 
 Terraform
 
-```bash
+```yaml
 terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.0"
-    }
-  }
+required_providers {
+aws = {
+source  = "hashicorp/aws"
+version = "~> 5.0"
+}
+}
 }
 ```
 
@@ -75,7 +73,7 @@ Your `.terraform.lock.hcl` will look like this:
 
 Terraform
 
-```bash
+```yaml
 # This file is maintained automatically by "terraform init".
 # Manual edits may be lost in future updates.
 
@@ -170,7 +168,7 @@ Terraform goes to the official Registry, grabs the fingerprints for all three sy
 
 Terraform
 
-```bash
+```yaml
 provider "registry.terraform.io/hashicorp/aws" {
   version     = "6.0.0"
   constraints = "~> 6.0"
