@@ -1,4 +1,4 @@
-# Terraform State Management and AWS S3 Remote Backend Guide (2026)
+# Terraform State Management and AWS S3 Remote Backend Guide
 
 ## 1\. The Role of the Terraform State File
 
@@ -110,7 +110,7 @@ Navigate to `00-bootstrap/` and create the following [`main.tf`](http://main.tf)
 
 Terraform
 
-```plaintext
+```yaml
 # 00-bootstrap/main.tf
 terraform {
   required_version = ">= 1.10.0" # Required for Native S3 Locking (use_lockfile)
@@ -161,7 +161,7 @@ Now, add this block to the **top** of the same `00-bootstrap/`[`main.tf`](http:/
 
 Terraform
 
-```plaintext
+```yaml
 terraform {
   backend "s3" {
     bucket       = "my-unique-company-state-2026"
@@ -200,7 +200,7 @@ Creating a separate [`backend.tf`](http://backend.tf) keeps your provider settin
 
 Terraform
 
-```plaintext
+```yaml
 # 01-project-app/backend.tf
 
 terraform {
@@ -224,19 +224,19 @@ Now you can write your `resource` code for creating VPC or any other resource in
 
 Terraform
 
-```json
+```yaml
 # Use data source to pull info from bootstrap if needed
 data "terraform_remote_state" "bootstrap" {
-  backend = "s3"
-  config = {
-    bucket = "my-unique-company-state-2026"
-    key    = "bootstrap/terraform.tfstate"
-    region = "us-east-1"
-  }
+backend = "s3"
+config = {
+bucket = "my-unique-company-state-2026"
+key    = "bootstrap/terraform.tfstate"
+region = "us-east-1"
+}
 }
 
 resource "aws_vpc" "main" {
-  cidr_block = "10.0.0.0/16"
+cidr_block = "10.0.0.0/16"
 }
 ```
 
@@ -349,17 +349,16 @@ Since your `01-project-app` is now in a separate folder from your `00-bootstrap`
 
 Terraform
 
-```json
+```yaml
 # 01-project-app/main.tf
 data "terraform_remote_state" "bootstrap" {
-  backend = "s3"
-  config = {
-    bucket = "my-unique-company-state-2026"
-    key    = "bootstrap/terraform.tfstate"
-    region = "us-east-1"
-  }
+backend = "s3"
+config = {
+bucket = "my-unique-company-state-2026"
+key    = "bootstrap/terraform.tfstate"
+region = "us-east-1"
 }
-
+}
 # Now you can use: data.terraform_remote_state.bootstrap.outputs.bucket_id
 ```
 
