@@ -5,13 +5,13 @@ HCL is a declarative language designed for configuration, not a general-purpose 
 ### **Basic Syntax:**
 
 - **Blocks:** Containers for configuration (e.g., `provider`, `resource`, `variable`).
-  ```bash
+  ```yaml
   block_type "block_label" "block_name" {
     # Arguments go here
   }
   ```
 - **Arguments:** Key-value pairs within a block that define specific settings.
-  ```bash
+  ```yaml
   argument_name = "argument_value"
   ```
 - **Attributes:** Output values exposed by a resource after it's provisioned. Accessed using dot notation (e.g., `aws_instance.my_ec2.public_ip`).
@@ -20,7 +20,7 @@ HCL is a declarative language designed for configuration, not a general-purpose 
 
 - **Purpose:** Configures the cloud provider or service Terraform will interact with.
 - **Example:**
-  ```bash
+  ```yaml
   provider "aws" {
     region = "us-east-1" # Specifies the AWS region
     # access_key = "..." # Not recommended, use aws configure or roles
@@ -36,7 +36,7 @@ HCL is a declarative language designed for configuration, not a general-purpose 
   - `<PROVIDER>_<TYPE>`: The resource type (e.g., `aws_instance` for an EC2 instance, `aws_s3_bucket` for an S3 bucket).
   - `<NAME>`: A logical name used within your Terraform configuration to refer to this specific resource.
 - **Example:**
-  ```bash
+  ```yaml
   resource "aws_instance" "my_ec2_instance" {
     ami           = "ami-0abcdef1234567890" # Example AMI ID
     instance_type = "t2.micro"
@@ -56,7 +56,8 @@ HCL is a declarative language designed for configuration, not a general-purpose 
   - **Finding the latest AMI:** Dynamically get the latest Amazon Machine Image ID for a specific OS.
   - **Discovering Subnets, Security Groups:** Get details about networking components that are managed elsewhere.
 - **Example:**
-  ```bash
+
+  ```yaml
   # 1. Find the VPC
   data "aws_vpc" "selected" {
     filter {
@@ -90,6 +91,7 @@ HCL is a declarative language designed for configuration, not a general-purpose 
     }
   }
   ```
+
 - **Benefit:** Promotes reusability and allows you to integrate your Terraform deployments into existing infrastructure without having to hardcode IDs.
 
 ### `variable` block:
@@ -97,17 +99,17 @@ HCL is a declarative language designed for configuration, not a general-purpose 
 - **Purpose:** Declares input variables for your Terraform configurations, making them reusable and flexible.
 - **Structure:**
 
-```bash
+```yaml
 variable "instance_count" {
-  description = "Number of EC2 instances to deploy"
-  type        = number
-  default     = 2
+description = "Number of EC2 instances to deploy"
+type        = number
+default     = 2
 }
 
 resource "aws_instance" "server" {
-  count         = var.instance_count
-  ami           = "ami-0c55b159cbfafe1f0"
-  instance_type = "t2.micro"
+count         = var.instance_count
+ami           = "ami-0c55b159cbfafe1f0"
+instance_type = "t2.micro"
 }
 ```
 
@@ -115,13 +117,13 @@ resource "aws_instance" "server" {
 - **Explanation:** Allows users to provide different values without modifying the main configuration file.
 - **Use Variable Validation:** Modern Terraform allows you to add custom error messages to variables to ensure inputs meet specific criteria.
   Terraform
-  ```bash
+  ```yaml
   variable "instance_type" {
-    type = string
-    validation {
-      condition     = can(regex("^t[2-3].", var.instance_type))
-      error_message = "Only T2 or T3 instances are allowed for this project."
-    }
+  type = string
+  validation {
+  condition     = can(regex("^t[2-3].", var.instance_type))
+  error_message = "Only T2 or T3 instances are allowed for this project."
+  }
   }
   ```
 
@@ -130,17 +132,17 @@ resource "aws_instance" "server" {
 - **Purpose:** Output variables are like **return values**. Defines output values that Terraform will display after applying the configuration. Useful for sharing information about the provisioned infrastructure. To display data on the CLI or to pass data from a child module to a parent module.
   - **Best Practice:** Use the `sensitive = true` argument for outputs containing passwords or private keys to prevent them from being printed in the console.
 - **Structure:**
-  ```bash
+  ```yaml
   output "output_name" {
     value       = resource_name.attribute_name # Value to be displayed
     description = "A description of the output"
   }
   ```
 - **Example:**
-  ```bash
+  ```yaml
   output "ec2_public_ip" {
-    value       = aws_instance.my_ec2_instance.public_ip
-    description = "The public IP address of the EC2 instance."
+  value       = aws_instance.my_ec2_instance.public_ip
+  description = "The public IP address of the EC2 instance."
   }
   ```
 - **Explanation:** Provides easily accessible information about the deployed resources, often used in subsequent automation.
@@ -154,7 +156,7 @@ resource "aws_instance" "server" {
 
 Terraform
 
-```bash
+```yaml
 locals {
   service_name = "billing-api"
   owner        = "finance-team"
@@ -187,7 +189,7 @@ resource "aws_instance" "example" {
 
 3. **Create** `main.tf`:
 
-   ```bash
+   ```yaml
    # main.tf
 
    # Configure the AWS Provider
