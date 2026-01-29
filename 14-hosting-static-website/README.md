@@ -24,7 +24,7 @@ Internet → CloudFront Distribution → S3 Bucket (Static Website)
 ├── variables.tf         # Input variables
 ├── outputs.tf          # Output values
 ├── README.md           # This file
-└── www/                # Website source files
+└── website/                # Website source files
     ├── index.html      # Main HTML page
     ├── style.css       # Stylesheet
     └── script.js       # JavaScript functionality
