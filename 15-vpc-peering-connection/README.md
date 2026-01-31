@@ -1,4 +1,4 @@
-# Day 15: VPC and Peering (Mini Project 2)
+# VPC and Peering (Mini Project 2)
 
 ## Overview
 
