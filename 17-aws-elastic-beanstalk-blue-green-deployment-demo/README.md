@@ -388,6 +388,22 @@ aws elasticbeanstalk request-environment-info \
 ✅ AWS CLI for environment swapping  
 ✅ Production-safe deployment practices
 
+## Important Note:
+
+- After running terraform apply, it is expected that Elastic Beanstalk creates an S3 bucket with a naming convention similar to
+  elasticbeanstalk-us-east-your-accountid
+- Even though you haven't explicitly defined this S3 bucket in your Terraform files, AWS Elastic Beanstalk automatically
+  creates and manages an S3 bucket for each region you use it in. This bucket is used to store application source bundles,
+  logs, and other deployment-related artifacts. The naming convention typically includes elasticbeanstalk, the AWS region,
+  and your AWS account ID.
+- Since your Terraform configuration (main.tf, blue-environment.tf, green-environment.tf) defines
+  aws_elastic_beanstalk_application and aws_elastic_beanstalk_environment resources, Elastic Beanstalk will create this S3
+  bucket as part of its service provisioning.
+- The S3 bucket named elasticbeanstalk-us-east-your-accountid (or similar) is a
+  service-managed resource by AWS Elastic Beanstalk, not a resource directly provisioned by your Terraform configuration.
+- If you want to delete this S3 bucket, you will need to do so manually through the AWS Management Console, AWS CLI, or an
+  AWS SDK. Ensure there are no critical artifacts before deletion.
+
 ## "aws_elastic_beanstalk_environment" Settings
 
 | **Setting**    | **Why?**                                                                             |
