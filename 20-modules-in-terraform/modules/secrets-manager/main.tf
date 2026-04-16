@@ -10,29 +10,29 @@ resource "aws_kms_key" "secrets" {
   tags = merge(
     var.tags,
     {
-      Name = "${var.name_prefix}-secrets-kms"
+      Name = "${var.cluster_name}-secrets-kms"
     }
   )
 }
 
 resource "aws_kms_alias" "secrets" {
   count         = var.create_db_secret || var.create_api_secret || var.create_app_config_secret ? 1 : 0
-  name          = "alias/${var.name_prefix}-secrets"
+  name          = "alias/${var.cluster_name}-secrets"
   target_key_id = aws_kms_key.secrets[0].key_id
 }
 
 # Secrets Manager - Database Credentials
 resource "aws_secretsmanager_secret" "db_credentials" {
   count                   = var.create_db_secret ? 1 : 0
-  name                    = "${var.name_prefix}-db-credentials"
-  description             = "Database credentials for ${var.name_prefix}"
+  name                    = "${var.cluster_name}-db-credentials"
+  description             = "Database credentials for ${var.cluster_name}"
   kms_key_id              = aws_kms_key.secrets[0].id
   recovery_window_in_days = 7
 
   tags = merge(
     var.tags,
     {
-      Name = "${var.name_prefix}-db-credentials"
+      Name = "${var.cluster_name}-db-credentials"
       Type = "database"
     }
   )
@@ -54,15 +54,15 @@ resource "aws_secretsmanager_secret_version" "db_credentials" {
 # Secrets Manager - API Keys
 resource "aws_secretsmanager_secret" "api_keys" {
   count                   = var.create_api_secret ? 1 : 0
-  name                    = "${var.name_prefix}-api-keys"
-  description             = "API keys for ${var.name_prefix}"
+  name                    = "${var.cluster_name}-api-keys"
+  description             = "API keys for ${var.cluster_name}"
   kms_key_id              = aws_kms_key.secrets[0].id
   recovery_window_in_days = 7
 
   tags = merge(
     var.tags,
     {
-      Name = "${var.name_prefix}-api-keys"
+      Name = "${var.cluster_name}-api-keys"
       Type = "api"
     }
   )
@@ -80,15 +80,15 @@ resource "aws_secretsmanager_secret_version" "api_keys" {
 # Secrets Manager - Application Config
 resource "aws_secretsmanager_secret" "app_config" {
   count                   = var.create_app_config_secret ? 1 : 0
-  name                    = "${var.name_prefix}-app-config"
-  description             = "Application configuration for ${var.name_prefix}"
+  name                    = "${var.cluster_name}-app-config"
+  description             = "Application configuration for ${var.cluster_name}"
   kms_key_id              = aws_kms_key.secrets[0].id
   recovery_window_in_days = 7
 
   tags = merge(
     var.tags,
     {
-      Name = "${var.name_prefix}-app-config"
+      Name = "${var.cluster_name}-app-config"
       Type = "application"
     }
   )
@@ -103,7 +103,7 @@ resource "aws_secretsmanager_secret_version" "app_config" {
 # IAM Policy for reading secrets (only created if at least one secret is enabled)
 resource "aws_iam_policy" "read_secrets" {
   count       = var.create_db_secret || var.create_api_secret || var.create_app_config_secret ? 1 : 0
-  name_prefix = "${var.name_prefix}-read-secrets-"
+  name_prefix = "${var.cluster_name}-read-secrets-"
   description = "Allow reading secrets from Secrets Manager"
 
   policy = jsonencode({

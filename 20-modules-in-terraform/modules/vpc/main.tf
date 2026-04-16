@@ -9,7 +9,7 @@ resource "aws_vpc" "main" {
   tags = merge(
     var.tags,
     {
-      Name = "${var.name_prefix}-vpc"
+      Name = "${var.cluster_name}-vpc"
     }
   )
 }
@@ -21,7 +21,7 @@ resource "aws_internet_gateway" "main" {
   tags = merge(
     var.tags,
     {
-      Name = "${var.name_prefix}-igw"
+      Name = "${var.cluster_name}-igw"
     }
   )
 }
@@ -38,7 +38,7 @@ resource "aws_subnet" "public" {
     var.tags,
     var.public_subnet_tags,
     {
-      Name = "${var.name_prefix}-public-${var.azs[count.index]}"
+      Name = "${var.cluster_name}-public-${var.azs[count.index]}"
       Type = "public"
     }
   )
@@ -55,7 +55,7 @@ resource "aws_subnet" "private" {
     var.tags,
     var.private_subnet_tags,
     {
-      Name = "${var.name_prefix}-private-${var.azs[count.index]}"
+      Name = "${var.cluster_name}-private-${var.azs[count.index]}"
       Type = "private"
     }
   )
@@ -69,7 +69,7 @@ resource "aws_eip" "nat" {
   tags = merge(
     var.tags,
     {
-      Name = "${var.name_prefix}-nat-eip-${count.index + 1}"
+      Name = "${var.cluster_name}-nat-eip-${count.index + 1}"
     }
   )
 
@@ -85,7 +85,7 @@ resource "aws_nat_gateway" "main" {
   tags = merge(
     var.tags,
     {
-      Name = "${var.name_prefix}-nat-${count.index + 1}"
+      Name = "${var.cluster_name}-nat-${count.index + 1}"
     }
   )
 
@@ -99,7 +99,7 @@ resource "aws_route_table" "public" {
   tags = merge(
     var.tags,
     {
-      Name = "${var.name_prefix}-public-rt"
+      Name = "${var.cluster_name}-public-rt"
     }
   )
 }
@@ -126,7 +126,7 @@ resource "aws_route_table" "private" {
   tags = merge(
     var.tags,
     {
-      Name = "${var.name_prefix}-private-rt-${count.index + 1}"
+      Name = "${var.cluster_name}-private-rt-${count.index + 1}"
     }
   )
 }

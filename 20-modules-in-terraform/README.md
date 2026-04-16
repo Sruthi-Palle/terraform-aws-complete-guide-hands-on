@@ -62,7 +62,7 @@ This will take approximately 10-15 minutes to complete.
 After the cluster is created, configure kubectl to connect:
 
 ```bash
-aws eks --region us-east-1 update-kubeconfig --name day20-eks-cluster
+aws eks --region us-east-1 update-kubeconfig --name my-eks-cluster
 ```
 
 Or use the output command:
@@ -93,7 +93,7 @@ You can customize the cluster by modifying `terraform.tfvars`:
 
 ```hcl
 aws_region         = "us-east-1"        # Change to your preferred region
-cluster_name       = "day20-eks-cluster" # Your cluster name
+cluster_name       = "my-eks-cluster" # Your cluster name
 kubernetes_version = "1.31"              # Kubernetes version
 environment        = "development"       # Environment tag
 
@@ -180,7 +180,7 @@ kubectl get svc nginx
 
 ```bash
 # View cluster logs in CloudWatch
-aws eks describe-cluster --name day20-eks-cluster --query cluster.logging
+aws eks describe-cluster --name my-eks-cluster --query cluster.logging
 ```
 
 ## Cost Optimization
@@ -214,17 +214,17 @@ terraform destroy
 aws sts get-caller-identity
 
 # Update kubeconfig
-aws eks --region us-east-1 update-kubeconfig --name day20-eks-cluster
+aws eks --region us-east-1 update-kubeconfig --name my-eks-cluster
 ```
 
 ### Nodes not joining cluster
 
 ```bash
 # Check node group status
-aws eks describe-nodegroup --cluster-name day20-eks-cluster --nodegroup-name <node-group-name>
+aws eks describe-nodegroup --cluster-name my-eks-cluster --nodegroup-name <node-group-name>
 
 # Check cluster security group
-aws eks describe-cluster --name day20-eks-cluster --query cluster.resourcesVpcConfig.clusterSecurityGroupId
+aws eks describe-cluster --name my-eks-cluster --query cluster.resourcesVpcConfig.clusterSecurityGroupId
 ```
 
 ### Insufficient capacity

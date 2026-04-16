@@ -128,7 +128,9 @@ This project demonstrates **production-ready EKS cluster deployment** using **cu
 - 3 Private Subnets (across 3 AZs)
 - 1 Internet Gateway
 - 1 NAT Gateway (cost optimization - single NAT)
+  (or) 3 NAT Gateway (high availability)
 - 1 Elastic IP (for NAT Gateway)
+  (or) 3 Elastic IP (for 3 NAT Gateway)
 - Route Tables (public + private)
 - Route Table Associations
 
@@ -292,7 +294,6 @@ Worker Nodes → Assumes Node Role → Pulls Images, Joins Cluster, Runs Pods
 - Demonstrates how to build a custom Secrets Manager module
 - Shows conditional resource creation pattern (`count = var.enable_db_secret ? 1 : 0`)
 - Provides a template for future use when you add databases or external services
-- Included in Day 20 learning objectives: "Custom module creation for Secrets Manager"
 
 **What It WOULD Create (if enabled):**
 
@@ -658,7 +659,7 @@ Total: 44 resources
 terraform output configure_kubectl
 
 # Or run directly
-aws eks --region us-east-1 update-kubeconfig --name day20-eks
+aws eks --region us-east-1 update-kubeconfig --name my-eks-cluster
 ```
 
 **What this does:**
@@ -775,17 +776,17 @@ kubectl describe sa test-sa
 
 ```bash
 # View cluster logs in CloudWatch
-aws logs tail /aws/eks/day20-eks/cluster --follow
+aws logs tail /aws/eks/my-eks-cluster/cluster --follow
 
 # Or via AWS Console:
-# CloudWatch → Log Groups → /aws/eks/day20-eks/cluster
+# CloudWatch → Log Groups → /aws/eks/my-eks-cluster/cluster
 ```
 
 ### 7. Verify Encryption
 
 ```bash
 # Check cluster encryption config
-aws eks describe-cluster --name day20-eks \
+aws eks describe-cluster --name my-eks-cluster \
   --query 'cluster.encryptionConfig'
 
 # Expected output:
@@ -801,11 +802,11 @@ aws eks describe-cluster --name day20-eks \
 
 ```bash
 # Check node groups
-aws eks list-nodegroups --cluster-name day20-eks
+aws eks list-nodegroups --cluster-name my-eks-cluster
 
 # Describe node group
 aws eks describe-nodegroup \
-  --cluster-name day20-eks \
+  --cluster-name my-eks-cluster \
   --nodegroup-name general
 
 # Verify spot instances
@@ -912,7 +913,7 @@ aws eks list-clusters
 
 # Check no EC2 instances
 aws ec2 describe-instances \
-  --filters "Name=tag:kubernetes.io/cluster/day20-eks,Values=owned" \
+  --filters "Name=tag:kubernetes.io/cluster/my-eks-cluster,Values=owned" \
   --query 'Reservations[].Instances[].InstanceId'
 
 # Check no NAT Gateways
@@ -920,7 +921,7 @@ aws ec2 describe-nat-gateways \
   --filter "Name=state,Values=available"
 
 # Check CloudWatch logs (optional - can keep for auditing)
-aws logs describe-log-groups --log-group-name-prefix /aws/eks/day20
+aws logs describe-log-groups --log-group-name-prefix /aws/eks/my-eks-cluster
 ```
 
 #### Step 5: Check for Orphaned Resources
@@ -1036,7 +1037,7 @@ aws sts get-caller-identity
 
 ```bash
 # Check node IAM role has correct policies
-aws iam list-attached-role-policies --role-name day20-eks-node-xxx
+aws iam list-attached-role-policies --role-name my-eks-cluster-node-xxx
 
 # Check security group rules
 kubectl describe node <node-name>
@@ -1046,7 +1047,7 @@ kubectl describe node <node-name>
 
 ```bash
 # Update kubeconfig
-aws eks update-kubeconfig --name day20-eks --region us-east-1
+aws eks update-kubeconfig --name my-eks-cluster --region us-east-1
 
 # Test authentication
 kubectl auth can-i get pods

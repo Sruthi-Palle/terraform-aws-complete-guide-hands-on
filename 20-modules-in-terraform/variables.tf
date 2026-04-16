@@ -9,7 +9,7 @@ variable "aws_region" {
 variable "cluster_name" {
   description = "Name of the EKS cluster"
   type        = string
-  default     = "day20-eks"
+  default     = "my-eks-cluster"
 }
 
 variable "kubernetes_version" {
@@ -43,79 +43,79 @@ variable "public_subnets" {
 }
 
 # Secrets Manager Variables (Optional)
-variable "enable_db_secret" {
-  description = "Enable database credentials secret"
-  type        = bool
-  default     = false
-}
+# variable "enable_db_secret" {
+#   description = "Enable database credentials secret"
+#   type        = bool
+#   default     = false
+# }
 
-variable "db_username" {
-  description = "Database username"
-  type        = string
-  default     = ""
-  sensitive   = true
-}
+# variable "db_username" {
+#   description = "Database username"
+#   type        = string
+#   default     = ""
+#   sensitive   = true
+# }
 
-variable "db_password" {
-  description = "Database password"
-  type        = string
-  default     = ""
-  sensitive   = true
-}
+# variable "db_password" {
+#   description = "Database password"
+#   type        = string
+#   default     = ""
+#   sensitive   = true
+# }
 
-variable "db_engine" {
-  description = "Database engine"
-  type        = string
-  default     = "postgres"
-}
+# variable "db_engine" {
+#   description = "Database engine"
+#   type        = string
+#   default     = "postgres"
+# }
 
-variable "db_host" {
-  description = "Database host"
-  type        = string
-  default     = ""
-}
+# variable "db_host" {
+#   description = "Database host"
+#   type        = string
+#   default     = ""
+# }
 
-variable "db_port" {
-  description = "Database port"
-  type        = number
-  default     = 5432
-}
+# variable "db_port" {
+#   description = "Database port"
+#   type        = number
+#   default     = 5432
+# }
 
-variable "db_name" {
-  description = "Database name"
-  type        = string
-  default     = ""
-}
+# variable "db_name" {
+#   description = "Database name"
+#   type        = string
+#   default     = ""
+# }
 
-variable "enable_api_secret" {
-  description = "Enable API keys secret"
-  type        = bool
-  default     = false
-}
+# variable "enable_api_secret" {
+#   description = "Enable API keys secret"
+#   type        = bool
+#   default     = false
+# }
 
-variable "api_key" {
-  description = "API key"
-  type        = string
-  default     = ""
-  sensitive   = true
-}
+# variable "api_key" {
+#   description = "API key"
+#   type        = string
+#   default     = ""
+#   sensitive   = true
+# }
 
-variable "api_secret" {
-  description = "API secret"
-  type        = string
-  default     = ""
-  sensitive   = true
-}
+# variable "api_secret" {
+#   description = "API secret"
+#   type        = string
+#   default     = ""
+#   sensitive   = true
+# }
 
-variable "enable_app_config_secret" {
-  description = "Enable application config secret"
-  type        = bool
-  default     = false
-}
+# variable "enable_app_config_secret" {
+#   description = "Enable application config secret"
+#   type        = bool
+#   default     = false
+# }
 
-variable "app_config" {
-  description = "Application configuration as a map"
-  type        = map(string)
-  default     = {}
-  sensitive   = true
-}
+# variable "app_config" {
+#   description = "Application configuration as a map"
+#   type        = map(string)
+#   default     = {}
+#   sensitive   = true
+# }

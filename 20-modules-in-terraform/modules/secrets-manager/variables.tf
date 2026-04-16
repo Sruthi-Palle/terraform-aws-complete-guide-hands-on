@@ -1,6 +1,6 @@
 # Secrets Manager Module Variables
 
-variable "name_prefix" {
+variable "cluster_name" {
   description = "Prefix for resource names"
   type        = string
 }

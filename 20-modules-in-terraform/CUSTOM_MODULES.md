@@ -29,7 +29,9 @@ modules/
 ## Modules Overview
 
 ### 1. VPC Module (`modules/vpc/`)
+
 Creates networking infrastructure:
+
 - VPC with custom CIDR
 - Public subnets (3 AZs) with Internet Gateway
 - Private subnets (3 AZs) with NAT Gateway
@@ -37,13 +39,17 @@ Creates networking infrastructure:
 - EKS-required subnet tags
 
 ### 2. IAM Module (`modules/iam/`)
+
 Creates IAM resources:
+
 - EKS cluster IAM role with policies
 - Node group IAM role with policies
 - OIDC provider for IRSA (IAM Roles for Service Accounts)
 
 ### 3. EKS Module (`modules/eks/`)
+
 Creates EKS cluster resources:
+
 - EKS control plane with KMS encryption
 - CloudWatch log group
 - Security groups (cluster + nodes)
@@ -52,7 +58,9 @@ Creates EKS cluster resources:
 - Customizable node group configurations
 
 ### 4. Secrets Manager Module (`modules/secrets-manager/`)
+
 Creates secrets management resources:
+
 - KMS key for secrets encryption
 - Database credentials secret (optional)
 - API keys secret (optional)
@@ -62,26 +70,31 @@ Creates secrets management resources:
 ## Deployment
 
 ### 1. Initialize Terraform
+
 ```bash
 terraform init
 ```
 
 ### 2. Review the Plan
+
 ```bash
 terraform plan
 ```
 
 ### 3. Apply Configuration
+
 ```bash
 terraform apply
 ```
 
 ### 4. Configure kubectl
+
 ```bash
-aws eks --region us-east-1 update-kubeconfig --name day20-eks
+aws eks --region us-east-1 update-kubeconfig --name my-eks-cluster
 ```
 
 ### 5. Verify Cluster
+
 ```bash
 kubectl get nodes
 kubectl get pods -A
@@ -90,12 +103,14 @@ kubectl get pods -A
 ## Module Features
 
 ### VPC Module Features
+
 - Multi-AZ deployment (3 availability zones)
 - Single NAT Gateway (cost optimization)
 - Automatic subnet tagging for EKS
 - IPv4 with DNS support
 
 ### EKS Module Features
+
 - KMS encryption for secrets
 - CloudWatch logging (all log types)
 - Public + Private endpoint access
@@ -107,12 +122,14 @@ kubectl get pods -A
   - Custom user data support
 
 ### IAM Module Features
+
 - AWS managed policies attached
 - OIDC provider for IRSA
 - Separate roles for cluster and nodes
 - Automatic policy attachments
 
 ### Secrets Manager Features
+
 - Optional secret creation
 - KMS encryption
 - IAM policy for reading secrets
@@ -121,7 +138,9 @@ kubectl get pods -A
 ## Customization
 
 ### Node Groups
+
 Edit `main.tf` to customize node groups:
+
 ```hcl
 node_groups = {
   general = {
@@ -136,7 +155,9 @@ node_groups = {
 ```
 
 ### Secrets Manager (Optional)
+
 Enable secrets in `terraform.tfvars`:
+
 ```hcl
 enable_db_secret = true
 db_username      = "admin"
@@ -158,13 +179,13 @@ terraform destroy
 
 ## Key Differences from Public Modules
 
-| Aspect | Public Modules | Custom Modules |
-|--------|----------------|----------------|
-| **Control** | Limited customization | Full control over resources |
-| **Learning** | Abstract complexity | Understand every resource |
-| **Maintenance** | Community maintained | Self maintained |
-| **Flexibility** | Pre-defined patterns | Custom patterns |
-| **Transparency** | Need to read source | Code is local |
+| Aspect           | Public Modules        | Custom Modules              |
+| ---------------- | --------------------- | --------------------------- |
+| **Control**      | Limited customization | Full control over resources |
+| **Learning**     | Abstract complexity   | Understand every resource   |
+| **Maintenance**  | Community maintained  | Self maintained             |
+| **Flexibility**  | Pre-defined patterns  | Custom patterns             |
+| **Transparency** | Need to read source   | Code is local               |
 
 ## Resources Created
 

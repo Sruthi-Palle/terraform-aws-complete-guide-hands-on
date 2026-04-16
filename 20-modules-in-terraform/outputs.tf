@@ -84,34 +84,34 @@ output "kms_key_arn" {
   value       = module.eks.kms_key_arn
 }
 
-# Secrets Manager Outputs (if enabled)
-output "secrets_kms_key_arn" {
-  description = "KMS key ARN used for secrets encryption"
-  value       = var.enable_db_secret || var.enable_api_secret || var.enable_app_config_secret ? module.secrets_manager.kms_key_arn : ""
-}
+# # Secrets Manager Outputs (if enabled)
+# output "secrets_kms_key_arn" {
+#   description = "KMS key ARN used for secrets encryption"
+#   value       = var.enable_db_secret || var.enable_api_secret || var.enable_app_config_secret ? module.secrets_manager.kms_key_arn : ""
+# }
 
-output "db_secret_arn" {
-  description = "ARN of the database credentials secret"
-  value       = var.enable_db_secret ? module.secrets_manager.db_secret_arn : ""
-}
+# output "db_secret_arn" {
+#   description = "ARN of the database credentials secret"
+#   value       = var.enable_db_secret ? module.secrets_manager.db_secret_arn : ""
+# }
 
-output "api_secret_arn" {
-  description = "ARN of the API keys secret"
-  value       = var.enable_api_secret ? module.secrets_manager.api_secret_arn : ""
-}
+# output "api_secret_arn" {
+#   description = "ARN of the API keys secret"
+#   value       = var.enable_api_secret ? module.secrets_manager.api_secret_arn : ""
+# }
 
-output "app_config_secret_arn" {
-  description = "ARN of the application config secret"
-  value       = var.enable_app_config_secret ? module.secrets_manager.app_config_secret_arn : ""
-}
+# output "app_config_secret_arn" {
+#   description = "ARN of the application config secret"
+#   value       = var.enable_app_config_secret ? module.secrets_manager.app_config_secret_arn : ""
+# }
 
-# Convenience Outputs
-output "region" {
-  description = "AWS region"
-  value       = var.aws_region
-}
+# # Convenience Outputs
+# output "region" {
+#   description = "AWS region"
+#   value       = var.aws_region
+# }
 
-output "configure_kubectl" {
-  description = "Command to configure kubectl"
-  value       = "aws eks --region ${var.aws_region} update-kubeconfig --name ${module.eks.cluster_name}"
-}
+# output "configure_kubectl" {
+#   description = "Command to configure kubectl"
+#   value       = "aws eks --region ${var.aws_region} update-kubeconfig --name ${module.eks.cluster_name}"
+# }

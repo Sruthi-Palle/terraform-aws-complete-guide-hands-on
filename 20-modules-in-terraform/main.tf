@@ -1,5 +1,5 @@
 # EKS Cluster Configuration with Custom Modules
-# Day 20: Custom Module Demo for EKS, VPC, IAM, and Secrets Manager
+#  Custom Module Demo for EKS, VPC, IAM, and Secrets Manager
 
 # Data sources
 data "aws_availability_zones" "available" {
@@ -12,14 +12,17 @@ data "aws_caller_identity" "current" {}
 module "vpc" {
   source = "./modules/vpc"
 
-  name_prefix     = var.cluster_name
+  cluster_name     = var.cluster_name
   vpc_cidr        = var.vpc_cidr
-  azs             = slice(data.aws_availability_zones.available.names, 0, 3)
+  # Use first 3 AZs for better availability
+  azs             = slice(data.aws_availability_zones.available.names, 0, 3) 
   private_subnets = var.private_subnets
   public_subnets  = var.public_subnets
 
   enable_nat_gateway = true
-  single_nat_gateway = true
+  # set to false to create a NAT Gateway in each AZ for better availability
+
+  single_nat_gateway = false 
 
   # Required tags for EKS
   public_subnet_tags = {
@@ -35,7 +38,7 @@ module "vpc" {
   tags = {
     Environment = var.environment
     Terraform   = "true"
-    Project     = "EKS-Day20"
+    Project     = "EKS-CLUSTER-DEMO"
   }
 }
 
@@ -48,7 +51,7 @@ module "iam" {
   tags = {
     Environment = var.environment
     Terraform   = "true"
-    Project     = "EKS-Day20"
+     Project     = "EKS-CLUSTER-DEMO"
   }
 }
 
@@ -116,41 +119,41 @@ module "eks" {
   tags = {
     Environment = var.environment
     Terraform   = "true"
-    Project     = "EKS-Day20"
+      Project     = "EKS-CLUSTER-DEMO"
   }
 
   depends_on = [module.iam]
 }
 
 # Custom Secrets Manager Module (Optional - for demo)
-module "secrets_manager" {
-  source = "./modules/secrets-manager"
+# module "secrets_manager" {
+#   source = "./modules/secrets-manager"
 
-  name_prefix = var.cluster_name
+#   cluster_name = var.cluster_name
 
-  # Enable secrets as needed
-  create_db_secret         = var.enable_db_secret
-  create_api_secret        = var.enable_api_secret
-  create_app_config_secret = var.enable_app_config_secret
+#   # Enable secrets as needed
+#   create_db_secret         = var.enable_db_secret
+#   create_api_secret        = var.enable_api_secret
+#   create_app_config_secret = var.enable_app_config_secret
 
-  # Database credentials (if enabled)
-  db_username = var.db_username
-  db_password = var.db_password
-  db_engine   = var.db_engine
-  db_host     = var.db_host
-  db_port     = var.db_port
-  db_name     = var.db_name
+#   # Database credentials (if enabled)
+#   db_username = var.db_username
+#   db_password = var.db_password
+#   db_engine   = var.db_engine
+#   db_host     = var.db_host
+#   db_port     = var.db_port
+#   db_name     = var.db_name
 
-  # API keys (if enabled)
-  api_key    = var.api_key
-  api_secret = var.api_secret
+#   # API keys (if enabled)
+#   api_key    = var.api_key
+#   api_secret = var.api_secret
 
-  # App config (if enabled)
-  app_config = var.app_config
+#   # App config (if enabled)
+#   app_config = var.app_config
 
-  tags = {
-    Environment = var.environment
-    Terraform   = "true"
-    Project     = "EKS-Day20"
-  }
-}
+#   tags = {
+#     Environment = var.environment
+#     Terraform   = "true"
+#     Project     = "EKS-CLUSTER-DEMO"
+#   }
+# }
